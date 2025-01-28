@@ -21,8 +21,8 @@ struct Registro{
 
 struct Node{
     Registro registro;
-    Node* esq;
-    Node* dir;
+    Node* esq = nullptr;
+    Node* dir = nullptr;
     Node(Registro registro, Node* esq = nullptr, Node* dir = nullptr)
         : registro(registro), esq(esq), dir(dir) {}};
 
@@ -51,7 +51,9 @@ Node* binaryTreeRegistro(Registro* registro, int tamanho) {
 };
 
 Node* buscaBinaryTree(Node* raiz, const std::string& chave){
-    if(raiz->registro.cadastro == chave || raiz == nullptr){
+    if(raiz == nullptr){
+        return nullptr;
+    }else if(raiz->registro.cadastro == chave || raiz == nullptr){
         return raiz;
     }else if(raiz->registro.cadastro < chave){
         return buscaBinaryTree(raiz->dir, chave);
@@ -61,35 +63,48 @@ Node* buscaBinaryTree(Node* raiz, const std::string& chave){
 }; 
 
 //ajustar as entradas com o tamanho do registro
-void ordem( Registro registros[], int ini, int fim){
-    if (ini >= fim){
-        return;
+void ordem(Registro registros[], int ini, int fim) {
+    if (ini >= fim) return;
+
+    int meio = ini + (fim - ini) / 2;
+    ordem(registros, ini, meio);
+    ordem(registros, meio + 1, fim);
+
+    // Criar vetores auxiliares
+    int n1 = meio - ini + 1;
+    int n2 = fim - meio;
+    Registro* esq = new Registro[n1];
+    Registro* dir = new Registro[n2];
+
+    for (int i = 0; i < n1; i++) {
+        esq[i] = registros[ini + i];
+    };
+    for (int j = 0; j < n2; j++) {
+        dir[j] = registros[meio + 1 + j]; 
     };
 
-    int pivo = ini + (fim - ini)/2;
-    ordem(registros, ini, pivo);
-    ordem(registros, pivo+1, fim); 
+    // Mesclagem ordenada
+    int i = 0, j = 0, k = ini;
+    while (i < n1 && j < n2) {
+        if (esq[i].porcentagem > dir[j].porcentagem || 
+            (esq[i].porcentagem == dir[j].porcentagem && esq[i].indice < dir[j].indice)) {
+            registros[k++] = esq[i++];
+        } else {
+            registros[k++] = dir[j++];
+        }
+    }
 
-    int i = ini, j = pivo + 1;
-    while (i <= pivo && j <= fim){
-        if(registros[i].indice <= registros[j].indice){
-                i++;
-        }else{ 
-            Registro tem = registros[j];
-            int  k = j;
-        
-        while (k > i) {
-            registros[k] = registros[k-1];
-            k--;
-        };
-        registros[i] = tem;
-        i++;
-        j++;
-        pivo++; 
-
-        };
+    // Copiar os elementos restantes
+    while (i < n1) {
+        registros[k++] = esq[i++];
     };
-};
+    while (j < n2) {
+        registros[k++] = dir[j++];
+    };
+
+    delete[] esq;
+    delete[] dir;
+}
 
 
 
@@ -175,11 +190,15 @@ auto start = high_resolution_clock::now();
     cout << "PROBLEMA 2"<<endl;
     int cont1 = 0, cont2 = 0;
     Node* caminho = nullptr; 
-    for (int i = 0; i < numSels; i++ ){
-        cout << "PROBLEMA 3"<<endl;
+    for (int i = 0; i < numCads; i++ ){
+        cout << i <<endl;
+        cout << registroCadastrados[i].cadastro<<endl;
         caminho = buscaBinaryTree(primeiraRaiz, registroCadastrados[i].cadastro); 
+        cout << caminho <<endl;
         cout << "PROBLEMA 4"<<endl;
-        if (registroCadastrados[i].cnpj != caminho->registro.cnpj){
+        if(caminho == nullptr){
+            continue;
+        }else if (registroCadastrados[i].cnpj != caminho->registro.cnpj){
             cout << "PROBLEMA 5"<<endl;
             registroCnpj[cont1].cadastro = registroCadastrados[i].cadastro;
             cout << "PROBLEMA 6"<<endl;
@@ -191,7 +210,7 @@ auto start = high_resolution_clock::now();
             cout << "PROBLEMA 8"<<endl;
             cont1++;
        } else if (caminho->registro.peso!=registroCadastrados[i].peso) {
-        cout << "PROBLEMA 9"<<endl;
+            cout << "PROBLEMA 9"<<endl;
             float diferenca = abs(caminho->registro.peso - registroCadastrados[i].peso);
             cout << "PROBLEMA 10"<<endl;
             float porc = round(diferenca*100/registroCadastrados[i].peso);
