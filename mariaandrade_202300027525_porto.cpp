@@ -170,24 +170,42 @@ auto start = high_resolution_clock::now();
 
 
     Registro* registroCnpj = new Registro[numSels];
+    cout << "PROBLEMA 1"<<endl;
     Registro* registroPeso =  new Registro[numSels];
+    cout << "PROBLEMA 2"<<endl;
     int cont1 = 0, cont2 = 0;
+    Node* caminho = nullptr; 
     for (int i = 0; i < numSels; i++ ){
-        Node registro = buscaBinaryTree(primeiraRaiz, registroCadastrados[i].cadastro)[0]; 
-        if (registro.registro.cnpj!=registroCadastrados[i].cnpj){
+        cout << "PROBLEMA 3"<<endl;
+        caminho = buscaBinaryTree(primeiraRaiz, registroCadastrados[i].cadastro); 
+        cout << "PROBLEMA 4"<<endl;
+        if (registroCadastrados[i].cnpj != caminho->registro.cnpj){
+            cout << "PROBLEMA 5"<<endl;
             registroCnpj[cont1].cadastro = registroCadastrados[i].cadastro;
-            registroCnpj[cont1].cnpj = registro.registro.cnpj;
+            cout << "PROBLEMA 6"<<endl;
+            registroCnpj[cont1].cnpj = caminho->registro.cnpj;
+            cout << "PROBLEMA 7"<<endl;
             registroCnpj[cont1].cnpjErro = registroCadastrados[i].cnpj;
-            registroCnpj[cont1].indice = registro.registro.indice;
+            cout << "PROBLEMA 8"<<endl;
+            registroCnpj[cont1].indice = caminho->registro.indice;
+            cout << "PROBLEMA 8"<<endl;
             cont1++;
-       } else if (registro.registro.peso!=registroCadastrados[i].peso) {
-            float diferenca = abs(registro.registro.peso - registroCadastrados[i].peso);
-            float porc = round(diferenca*100/registro.registro.peso);
+       } else if (caminho->registro.peso!=registroCadastrados[i].peso) {
+        cout << "PROBLEMA 9"<<endl;
+            float diferenca = abs(caminho->registro.peso - registroCadastrados[i].peso);
+            cout << "PROBLEMA 10"<<endl;
+            float porc = round(diferenca*100/registroCadastrados[i].peso);
+            cout << "PROBLEMA 11"<<endl;
             if (porc>10){
+                cout << "PROBLEMA 12"<<endl;
                 registroCadastrados[i].porcentagem = porc;
+                cout << "PROBLEMA 13"<<endl;
                 registroCadastrados[i].diferenca = diferenca;
+                cout << "PROBLEMA 14"<<endl;
                 registroPeso[cont2] = registroCadastrados[i];
+                cout << "PROBLEMA 15"<<endl;
                 cont2++;
+                cout << "PROBLEMA 16"<<endl;
             };
        }; 
     }; 
@@ -203,7 +221,7 @@ auto start = high_resolution_clock::now();
         arquivoOut << registroCnpj[i].cadastro+":"+registroCnpj[i].cnpj+"<->"+registroCnpj[i].cnpjErro<<endl;
     };
     for(int i = 0; i < cont2; i++){
-        arquivoOut << registroPeso[i].cadastro<<":"<<registroPeso[i].diferenca<<"kg("<<registroPeso[i].porcentagem<<")"<<endl;
+        arquivoOut << registroPeso[i].cadastro<<":"<<registroPeso[i].diferenca<<"kg("<<registroPeso[i].porcentagem<<"%)"<<endl;
     };
 
     cout << "PASSO 6 "<<endl;
