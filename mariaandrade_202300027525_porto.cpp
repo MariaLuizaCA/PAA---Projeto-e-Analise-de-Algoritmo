@@ -131,7 +131,6 @@ auto start = high_resolution_clock::now();
     Node* raiz = nullptr;
     Node* primeiraRaiz = nullptr;
 
-    cout << "PASSO 1 "<<endl;
 
     //leitura do número de conteiners cadastrados
     getline(arquivoIn, linha);
@@ -150,7 +149,6 @@ auto start = high_resolution_clock::now();
         registroCadastrados[i].indice = i; 
     };
     
-    cout << "PASSO 2 "<<endl;
 
 
     //leitura dos selecionados
@@ -176,8 +174,6 @@ auto start = high_resolution_clock::now();
         };
     };
 
-    cout << "PASSO 3 "<<endl;
-
 /*DESENVOLVIMENTO INCOMPLETO DO PROCESSAMENTO DAS LISTAS 
     1 - prioridade a diferença de cnpj 
     2 - armazenar dados da ordem de cadastrados
@@ -185,56 +181,34 @@ auto start = high_resolution_clock::now();
 
 
     Registro* registroCnpj = new Registro[numSels];
-    cout << "PROBLEMA 1"<<endl;
     Registro* registroPeso =  new Registro[numSels];
-    cout << "PROBLEMA 2"<<endl;
     int cont1 = 0, cont2 = 0;
     Node* caminho = nullptr; 
     for (int i = 0; i < numCads; i++ ){
-        cout << i <<endl;
-        cout << registroCadastrados[i].cadastro<<endl;
         caminho = buscaBinaryTree(primeiraRaiz, registroCadastrados[i].cadastro); 
-        cout << caminho <<endl;
-        cout << "PROBLEMA 4"<<endl;
         if(caminho == nullptr){
             continue;
         }else if (registroCadastrados[i].cnpj != caminho->registro.cnpj){
-            cout << "PROBLEMA 5"<<endl;
             registroCnpj[cont1].cadastro = registroCadastrados[i].cadastro;
-            cout << "PROBLEMA 6"<<endl;
             registroCnpj[cont1].cnpj = caminho->registro.cnpj;
-            cout << "PROBLEMA 7"<<endl;
             registroCnpj[cont1].cnpjErro = registroCadastrados[i].cnpj;
-            cout << "PROBLEMA 8"<<endl;
             registroCnpj[cont1].indice = caminho->registro.indice;
-            cout << "PROBLEMA 8"<<endl;
             cont1++;
        } else if (caminho->registro.peso!=registroCadastrados[i].peso) {
-            cout << "PROBLEMA 9"<<endl;
             float diferenca = abs(caminho->registro.peso - registroCadastrados[i].peso);
-            cout << "PROBLEMA 10"<<endl;
             float porc = round(diferenca*100/registroCadastrados[i].peso);
-            cout << "PROBLEMA 11"<<endl;
             if (porc>10){
-                cout << "PROBLEMA 12"<<endl;
                 registroCadastrados[i].porcentagem = porc;
-                cout << "PROBLEMA 13"<<endl;
                 registroCadastrados[i].diferenca = diferenca;
-                cout << "PROBLEMA 14"<<endl;
                 registroPeso[cont2] = registroCadastrados[i];
-                cout << "PROBLEMA 15"<<endl;
                 cont2++;
-                cout << "PROBLEMA 16"<<endl;
             };
        }; 
     }; 
 
-    cout << "PASSO 4 "<<endl;
     
     ordem(registroCnpj, 0, cont1 - 1);
     ordem(registroPeso, 0, cont2 - 1);
-
-    cout << "PASSO 5 "<<endl;
 
     for(int i = 0; i < cont1; i++){
         arquivoOut << registroCnpj[i].cadastro+":"+registroCnpj[i].cnpj+"<->"+registroCnpj[i].cnpjErro<<endl;
@@ -243,7 +217,6 @@ auto start = high_resolution_clock::now();
         arquivoOut << registroPeso[i].cadastro<<":"<<registroPeso[i].diferenca<<"kg("<<registroPeso[i].porcentagem<<"%)"<<endl;
     };
 
-    cout << "PASSO 6 "<<endl;
     arquivoIn.close();
     arquivoOut.close();
     
