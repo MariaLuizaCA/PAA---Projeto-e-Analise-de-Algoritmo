@@ -122,7 +122,6 @@ void quickSort(int* vetor, int inicio, int fim, string tipo){
     if (inicio<fim){
         if(tipo == "LP"){ 
             pivo = LP(vetor, inicio, fim);
-            cont++;
             quickSort(vetor, inicio, pivo-1, tipo);
             quickSort(vetor, pivo+1, fim, tipo);
         } else if(tipo == "LM"){
@@ -272,3 +271,4 @@ auto start = high_resolution_clock::now();
     return 0;
 };
 
+// .\mariaandrade_202300027525_quicksort.exe quicksort.input.txt quicksort.output.txt
