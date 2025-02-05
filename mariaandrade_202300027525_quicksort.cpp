@@ -51,12 +51,12 @@ int LM(int* vetor, int inicio, int fim){
     int v2 = inicio + (fim - inicio + 1) / 2;
     int v3 = inicio + 3 * (fim - inicio + 1) / 4;
 
-    if (vetor[v1] > vetor[v2]  && vetor[v1] < vetor[v3] || vetor[v1] < vetor[v2] && vetor[v1] > vetor[v3]){
-       ordem(&vetor[fim], &vetor[v1]);
+     if (vetor[v1] > vetor[v2]  && vetor[v1] < vetor[v3] || vetor[v1] < vetor[v2] && vetor[v1] > vetor[v3]){
+       return v1;
     } else if(vetor[v2] > vetor[v1]  && vetor[v2] < vetor[v3] || vetor[v2] < vetor[v1] && vetor[v2] > vetor[v3]){
-        ordem(&vetor[fim], &vetor[v2]);
+       return v2;
     } else {
-        ordem(&vetor[fim], &vetor[v3]);
+       return v3;
     };
         return LP(vetor, inicio, fim);
 };
@@ -97,11 +97,11 @@ int HM(int* vetor, int inicio, int fim){
     int v3 = inicio + 3 * (fim - inicio + 1) / 4;
 
     if (vetor[v1] > vetor[v2]  && vetor[v1] < vetor[v3] || vetor[v1] < vetor[v2] && vetor[v1] > vetor[v3]){
-       ordem(&vetor[inicio], &vetor[v1]);
+       return v1;
     } else if(vetor[v2] > vetor[v1]  && vetor[v2] < vetor[v3] || vetor[v2] < vetor[v1] && vetor[v2] > vetor[v3]){
-        ordem(&vetor[inicio], &vetor[v2]);
+       return v2;
     } else {
-        ordem(&vetor[inicio], &vetor[v3]);
+       return v3;
     };
         return HP(vetor, inicio, fim);
     };
@@ -125,9 +125,11 @@ void quickSort(int* vetor, int inicio, int fim, string tipo){
             quickSort(vetor, inicio, pivo-1, tipo);
             quickSort(vetor, pivo+1, fim, tipo);
         } else if(tipo == "LM"){
-            pivo = LM(vetor, inicio, fim);
+            int indice = LM(vetor, inicio, fim);
+            ordem(&vetor[fim], &vetor[indice]);
+            pivo = LP(vetor, inicio, fim);
             quickSort(vetor, inicio, pivo-1, tipo);
-            quickSort(vetor, pivo+1, fim, tipo);   
+            quickSort(vetor, pivo+1,fim,tipo);
         } else if(tipo == "LA"){
             pivo = LA(vetor, inicio, fim);
             quickSort(vetor, inicio, pivo-1, tipo);
@@ -225,27 +227,27 @@ auto start = high_resolution_clock::now();
         cont = 0;
         quickSort(leituraVetores[i].vetor, 0, leituraVetores[i].tamanho - 1, "LP");  
         leituraQuicks[1].contador = cont;
-
+        cout << "terminou LP"  << endl;
         cont = 0; 
         quickSort(leituraVetores[i].vetor, 0, leituraVetores[i].tamanho - 1, "LM");  
         leituraQuicks[2].contador = cont;
-
+        cout << "terminou LM"  << endl;
         cont = 0; 
         quickSort(leituraVetores[i].vetor, 0, leituraVetores[i].tamanho - 1, "LA");  
         leituraQuicks[3].contador = cont;
-
+        cout << "terminou LA"  << endl;
         cont = 0;  
         quickSort(leituraVetores[i].vetor, 0, leituraVetores[i].tamanho - 1, "HP");
         leituraQuicks[4].contador = cont;  
-
+        cout << "terminou HP"  << endl;
         cont = 0; 
         quickSort(leituraVetores[i].vetor, 0, leituraVetores[i].tamanho - 1, "HM");  
         leituraQuicks[5].contador = cont;
-
+        cout << "terminou HM"  << endl;
         cont = 0; 
         quickSort(leituraVetores[i].vetor, 0, leituraVetores[i].tamanho - 1, "HA");  
         leituraQuicks[6].contador = cont;
-
+        cout << "terminou HA"  << endl;
         cont = 0; 
        // quickSortQuick(leituraQuicks, 1, 6);
 
