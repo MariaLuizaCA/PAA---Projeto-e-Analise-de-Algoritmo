@@ -25,6 +25,7 @@ struct Vetores{
 };
 
 //troca de valores
+//troca de valores
 void ordem(int* vetor1, int* vetor2){
     int temp = *vetor1;
     *vetor1 = *vetor2;
@@ -41,76 +42,73 @@ int LP(int* vetor, int inicio, int fim){
         };
     };
     ordem(&vetor[marcador + 1], &vetor[fim]);
-    cont++;
     return marcador + 1;
 };
 
 int LM(int* vetor, int inicio, int fim){
-    int mediana; 
 
-    if(inicio == fim){
-        return inicio; //vetor[inicio];
-    } else {
     int v1 = inicio + (fim - inicio + 1) / 4;
     int v2 = inicio + (fim - inicio + 1) / 2;
     int v3 = inicio + 3 * (fim - inicio + 1) / 4;
 
     if (vetor[v1] > vetor[v2]  && vetor[v1] < vetor[v3] || vetor[v1] < vetor[v2] && vetor[v1] > vetor[v3]){
-       mediana = v1;
+       ordem(&vetor[fim], &vetor[v1]);
     } else if(vetor[v2] > vetor[v1]  && vetor[v2] < vetor[v3] || vetor[v2] < vetor[v1] && vetor[v2] > vetor[v3]){
-        mediana = v2;
+        ordem(&vetor[fim], &vetor[v2]);
     } else {
-        mediana = v3;
+        ordem(&vetor[fim], &vetor[v3]);
     };
-        ordem(&vetor[fim], &vetor[mediana]);
         return LP(vetor, inicio, fim);
-    };
 };
 
 int LA(int* vetor, int inicio, int fim){
-    int aleatorio = inicio + rand() % (fim - inicio + 1);;
+    int aleatorio = inicio + (abs(vetor[inicio]) % (fim - inicio + 1));
     ordem(&vetor[fim], &vetor[aleatorio]);
     return LP(vetor, inicio, fim);
 };
 
 int HP(int* vetor, int inicio, int fim){
-    int pivo = vetor[inicio], marcador = inicio, ponteiro = fim +1; 
-    while(1){
-        while(vetor[--ponteiro]>pivo);
-        while(vetor[++marcador]<pivo);
-        if( marcador < ponteiro) {
-            ordem(&vetor[marcador], &vetor[ponteiro]);
-        } else {
-          return ponteiro;  
-        };
+    int pivo = vetor[inicio], marcador = inicio - 1, ponteiro = fim + 1; 
+    while(true){
+        do {
+            ponteiro--;
+        } while (vetor[ponteiro] > pivo);
+
+        // Move o marcador para a direita até encontrar um elemento >= pivô
+        do {
+            marcador++;
+        } while (vetor[marcador] < pivo);
+
+        // Se os ponteiros se cruzaram, a partição está completa
+        if (marcador >= ponteiro) {
+            return ponteiro; // Retorna o ponto de divisão
+        }
+
+        // Troca os elementos fora de ordem e incrementa o contador de trocas
+        ordem(&vetor[marcador], &vetor[ponteiro]);
+    
     };
 };
 
 int HM(int* vetor, int inicio, int fim){
 
-    int mediana; 
-
-    if(inicio == fim){
-        return inicio; //vetor[inicio];
-    } else {
     int v1 = inicio + (fim - inicio + 1) / 4;
     int v2 = inicio + (fim - inicio + 1) / 2;
     int v3 = inicio + 3 * (fim - inicio + 1) / 4;
 
     if (vetor[v1] > vetor[v2]  && vetor[v1] < vetor[v3] || vetor[v1] < vetor[v2] && vetor[v1] > vetor[v3]){
-       mediana = v1;
+       ordem(&vetor[inicio], &vetor[v1]);
     } else if(vetor[v2] > vetor[v1]  && vetor[v2] < vetor[v3] || vetor[v2] < vetor[v1] && vetor[v2] > vetor[v3]){
-        mediana = v2;
+        ordem(&vetor[inicio], &vetor[v2]);
     } else {
-        mediana = v3;
+        ordem(&vetor[inicio], &vetor[v3]);
     };
-        ordem(&vetor[inicio], &vetor[mediana]);
         return HP(vetor, inicio, fim);
     };
-};
+
 
 int HA(int* vetor, int inicio, int fim){
-    int aleatorio = inicio + rand() % (fim - inicio + 1);;
+    int aleatorio = inicio + (abs(vetor[inicio]) % (fim - inicio + 1));
     ordem(&vetor[inicio], &vetor[aleatorio]);
     return HP(vetor, inicio, fim);
 };
@@ -118,6 +116,7 @@ int HA(int* vetor, int inicio, int fim){
 
 //definição do quicksort 
 void quickSort(int* vetor, int inicio, int fim, string tipo){
+    cont ++;
     //seleção de ordenação
     int pivo;
     if (inicio<fim){
@@ -125,49 +124,37 @@ void quickSort(int* vetor, int inicio, int fim, string tipo){
             pivo = LP(vetor, inicio, fim);
             cont++;
             quickSort(vetor, inicio, pivo-1, tipo);
-            cont++;
             quickSort(vetor, pivo+1, fim, tipo);
         } else if(tipo == "LM"){
             pivo = LM(vetor, inicio, fim);
-            cont++;
             quickSort(vetor, inicio, pivo-1, tipo);
-            cont++;
             quickSort(vetor, pivo+1, fim, tipo);   
         } else if(tipo == "LA"){
             pivo = LA(vetor, inicio, fim);
-            cont++;
             quickSort(vetor, inicio, pivo-1, tipo);
-            cont++;
             quickSort(vetor, pivo+1, fim, tipo);
         } else if(tipo == "HP"){
             pivo = HP(vetor, inicio, fim);
-            cont++;
             quickSort(vetor, inicio, pivo, tipo);
-            cont++;
             quickSort(vetor, pivo + 1, fim, tipo);
         } else if(tipo == "HM"){
             pivo = HM(vetor, inicio, fim);
-            cont++;
             quickSort(vetor, inicio, pivo, tipo);
-            cont++;
             quickSort(vetor, pivo + 1, fim, tipo);
         }else if(tipo == "HA"){
             pivo = HA(vetor, inicio, fim);
-            cont++;
             quickSort(vetor, inicio, pivo, tipo);
-            cont++;
             quickSort(vetor, pivo+1, fim, tipo);
         };
     };
 };
 
+
 void ordemQuick(Quick* a, Quick* b) {
     Quick temp = *a;
     *a = *b;
     *b = temp;
-}
-
-
+};
 
 int PPQuick(Quick* quicks, int inicio , int fim){
     int pivo = quicks[fim].contador;
@@ -194,7 +181,6 @@ void quickSortQuick(Quick* quicks, int inicio, int fim) {
 
 int main (int argc, char* argv[]){
 
-
 auto start = high_resolution_clock::now();
     //leitura e escrita de arquivo
     ifstream arquivoIn(argv[1]);
@@ -207,35 +193,30 @@ auto start = high_resolution_clock::now();
     };
 
     int numVetores;
-    string linha, valor;
 
-    getline(arquivoIn, linha);
-    istringstream num(linha);
-    num >> numVetores;
-
+    arquivoIn >> numVetores;
+    cout << numVetores << endl;
     Vetores* leituraVetores = new Vetores[numVetores];
-    Quick* leituraQuicks = new Quick[7];//eu vou sobrepor os valores de quicks
-
-
-    leituraQuicks[1].tipo = "LP"; 
-    leituraQuicks[2].tipo = "LM";
-    leituraQuicks[3].tipo = "LA"; 
-    leituraQuicks[4].tipo = "HP"; 
-    leituraQuicks[5].tipo = "HM";  
-    leituraQuicks[6].tipo = "HA";  
+    Quick* leituraQuicks = new Quick[7]; //eu vou sobrepor os valores de quicks
 
     for (int i = 0; i < numVetores; i++){
-        getline(arquivoIn, linha);
-        leituraVetores[i].tamanho = stoi(linha);
+
+        //definição dos tipos de ordenação para voltar ao padrão em cada iteração
+        leituraQuicks[1].tipo = "LP"; 
+        leituraQuicks[2].tipo = "LM";
+        leituraQuicks[3].tipo = "LA"; 
+        leituraQuicks[4].tipo = "HP"; 
+        leituraQuicks[5].tipo = "HM";  
+        leituraQuicks[6].tipo = "HA";  
+
+        arquivoIn >> leituraVetores[i].tamanho;
         leituraVetores[i].vetor = new int[leituraVetores[i].tamanho];
-        getline(arquivoIn, linha);
-        istringstream celulasV(linha);
+
 
         for (int j = 0; j < leituraVetores[i].tamanho; j++){    
             
-            getline(celulasV, linha, ' ');
-            leituraVetores[i].vetor[j] = stoi(linha);
-
+                arquivoIn >> leituraVetores[i].vetor[j];
+                cout << leituraVetores[i].vetor[j] << " ";
             };
 
         leituraQuicks[0].contador = leituraVetores[i].tamanho; 
@@ -267,7 +248,7 @@ auto start = high_resolution_clock::now();
         leituraQuicks[6].contador = cont;
 
         cont = 0; 
-        quickSortQuick(leituraQuicks, 1, 6);
+       // quickSortQuick(leituraQuicks, 1, 6);
 
 
         arquivoOut << i << ":N(" << leituraQuicks[0].contador << ")," 
@@ -291,4 +272,3 @@ auto start = high_resolution_clock::now();
     return 0;
 };
 
-//.\mariaandrade_202300027525_quicksort.exe quicksort.input.txt quicksort.output.txt
