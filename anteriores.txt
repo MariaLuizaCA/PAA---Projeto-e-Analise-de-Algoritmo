@@ -1,0 +1,19 @@
+/*int tabelaMelhorValor(Caminhao &peso, Caminhao &volume, Pacote* pacotes,int numPac){//falta testar essa função
+
+    int tabela[numPac][peso.peso][volume.volume];
+
+    for (int i = 1; i < numPac; i++){
+        for (int j = peso.peso; j >= pacotes[i].peso; j--){
+            for (int k = volume.volume; k >= pacotes[i].volume; k--){
+                if(j < pacotes[i].peso && k < pacotes[i].volume){
+                    tabela[i][j][k] = tabela[i-1][j][k];
+                }else{//caso eu pegue o pacote 
+                    tabela[i][j][k] = max(tabela[i-1][j][k], tabela[i-1][j - pacotes[i].peso][k - pacotes[i].volume] + pacotes[i].valor);
+                };    
+                //caso eu pegue o pacote
+            };
+        };
+    };
+
+    return tabela[numPac][peso.peso][volume.volume];
+};*/
